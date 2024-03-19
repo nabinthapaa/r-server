@@ -11,7 +11,7 @@ fn main() {
 
     let pool = ThreadPool::new(4);
 
-    for stream in listener.incoming() {
+    for stream in listener.incoming().take(2) {
         let stream = stream.unwrap();
         pool.execute(|| {
             handle_connection(stream);
@@ -26,7 +26,7 @@ fn handle_connection(mut stream: TcpStream) {
     let get = b"GET / HTTP/1.1\r\n";
     let sleep = b"GET /sleep HTTP/1.1\r\n";
 
-    println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
+    // println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
 
     // HTTP-Version Status-Code Reason-Phrase CRLF
     // headers CRLF
